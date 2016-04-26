@@ -10,7 +10,7 @@
 #include "timer.h"
 #include "dpp3438.h"
 #include "button.h"
-#include "I2C.h"
+#include "I2C_polled.h"
 
 powerState_t power_state = OFF;
 
@@ -30,17 +30,15 @@ int main(void) {
 
 
 
-    P3DIR |= BIT4 | BIT5 | BIT6;
-    P3OUT |= BIT4;
-
-
+    P4DIR |= BIT0 | BIT1;
+    P4OUT |= BIT0;
 
 
     while(1)
     {
 
     	button_checkPowerKey(&power_state);
-		P3OUT ^= BIT6;
+		P4OUT ^= BIT0;
 		timer_waitMilli(500);
 
 		switch(power_state)
@@ -49,7 +47,7 @@ int main(void) {
 			dpp_turnOn();
 			break;
 		case ON:
-			//dpp_sourceSelect(1);
+			dpp_sourceSelect(1);
 			timer_waitMilli(750);
 			dpp_dispCurtain(1, toggle );
 			toggle ^= 1;

@@ -10,7 +10,7 @@ button.obj: ../dpp3438.h
 button.obj: ../timer.h
 button.obj: ../util.h
 button.obj: ../dpp3438.h
-button.obj: ../I2C.h
+button.obj: ../I2C_polled.h
 button.obj: C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/stdlib.h
 button.obj: C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/linkage.h
 
@@ -24,6 +24,6 @@ C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/stdint.h:
 ../timer.h: 
 ../util.h: 
 ../dpp3438.h: 
-../I2C.h: 
+../I2C_polled.h: 
 C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/stdlib.h: 
 C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/linkage.h: 

@@ -7,24 +7,24 @@
 
 #include "button.h"
 
-//Navigation buttons -- Port 2
-#define PB_UP	BIT0
-#define PB_DN	BIT1
-#define PB_LF	BIT2
-#define PB_RT	BIT3
-#define PB_SEL	BIT4
+//Navigation buttons -- Port 4
+#define PB_UP	BIT3
+#define PB_DN	BIT4
+#define PB_LF	BIT5
+#define PB_RT	BIT6
+#define PB_SEL	BIT7
 
-//Power switcg -- Port 3
-#define PWR_SW_PIN	BIT3
+//Power switch -- Port 4
+#define PWR_SW_PIN	BIT2
 
 //#define PWR_ON_LED 	BIT4 //Port 3
 
 //Initialize ports for buttons, and proj_on switch
 void button_initPorts(void)
 {
-	P2DIR &= ~(PB_UP | PB_DN | PB_LF | PB_RT | PB_SEL);
+	P4DIR &= ~(PB_UP | PB_DN | PB_LF | PB_RT | PB_SEL);
 	//P2IE |= (PB_UP | PB_DN | PB_LF | PB_RT | PB_SEL);
-	P3DIR &= ~(PWR_SW_PIN);
+	P4DIR &= ~(PWR_SW_PIN);
 
 
 }
@@ -40,7 +40,7 @@ void button_checkPowerKey(powerState_t *currentState)
 	switch(*currentState)
 	{
 		case OFF:
-			if(P3IN & PWR_SW_PIN) *currentState = TURN_ON;
+			if(P4IN & PWR_SW_PIN) *currentState = TURN_ON;
 			//Else Nothing
 			break;
 		case TURN_ON:
@@ -48,7 +48,7 @@ void button_checkPowerKey(powerState_t *currentState)
 			break;
 
 		case ON:
-			if(!(P3IN & PWR_SW_PIN)) *currentState = TURN_OFF;
+			if(!(P4IN & PWR_SW_PIN)) *currentState = TURN_OFF;
 			//Do Nothing
 			break;
 
@@ -59,7 +59,7 @@ void button_checkPowerKey(powerState_t *currentState)
 
 		default:
 			//Error undefined state
-			P3OUT |= BIT5; //Error led
+			//P3OUT |= BIT5; //Error led
 			break;
 	}
 }

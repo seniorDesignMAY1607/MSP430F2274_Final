@@ -9,7 +9,7 @@ dpp3438.obj: C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/stdint.h
 dpp3438.obj: ../timer.h
 dpp3438.obj: ../util.h
 dpp3438.obj: ../dpp3438.h
-dpp3438.obj: ../I2C.h
+dpp3438.obj: ../I2C_polled.h
 dpp3438.obj: C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/stdlib.h
 dpp3438.obj: C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/linkage.h
 
@@ -22,6 +22,6 @@ C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/stdint.h:
 ../timer.h: 
 ../util.h: 
 ../dpp3438.h: 
-../I2C.h: 
+../I2C_polled.h: 
 C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/stdlib.h: 
 C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/linkage.h: 

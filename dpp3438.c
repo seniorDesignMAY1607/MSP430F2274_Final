@@ -7,8 +7,8 @@
 
 #include "dpp3438.h"
 
-#define PROJ_ON_PIN		BIT6	//Port 2
-#define HOST_IRQ_PIN 	BIT5	//Port 2
+#define PROJ_ON_PIN		BIT3	//Port 3
+#define HOST_IRQ_PIN 	BIT0	//Port 3
 
 #define DPP_ADDR	0x1B
 
@@ -77,11 +77,11 @@
 void dpp_init(void)
 {
 	//Set host IRQ as input and ProjOn as output
-	P2DIR &= ~HOST_IRQ_PIN; //HOST IRQ
+	P3DIR &= ~HOST_IRQ_PIN; //HOST IRQ
 
-	P2DIR |= PROJ_ON_PIN;
-	P2SEL &= ~(PROJ_ON_PIN); //Change from Crystal
-	P2OUT &= ~PROJ_ON_PIN; //Proj Off
+	P3DIR |= PROJ_ON_PIN;
+	P3SEL &= ~(PROJ_ON_PIN); //Change from Crystal
+	P3OUT &= ~PROJ_ON_PIN; //Proj Off
 
 	//(Eric) Let's initialize i2c here!
 	i2c_masterInit();
@@ -91,9 +91,9 @@ void dpp_init(void)
 void dpp_turnOn(void)
 {
 	//TODO: Turn on 1.8V power, check status
-	P2OUT |= PROJ_ON_PIN;
+	P3OUT |= PROJ_ON_PIN;
 
-	while(P2IN & HOST_IRQ_PIN)
+	while(P3IN & HOST_IRQ_PIN)
 	{
 		//Do Nothing
 		//TODO: Check for timeout
@@ -109,7 +109,7 @@ void dpp_turnOn(void)
 void dpp_turnOff(void)
 {
 	//TODO: Stop I2C
-	P2OUT &= ~PROJ_ON_PIN;
+	P3OUT &= ~PROJ_ON_PIN;
 
 	//timer_waitMilli(500);
 	//TODO:Turn off 1.8V Power
@@ -138,8 +138,8 @@ void dpp_writePolledCommand(uint8_t subaddress, uint8_t *data, uint8_t numBytes)
 
 	if(i2c_sendPolledData(DPP_ADDR, allData, numBytes + 1))
 	{
-		//I2C Fault
-		P3OUT |= BIT4;
+		//I2C Fault -- debug
+		//P3OUT |= BIT4;
 	}
 }
 
@@ -147,16 +147,10 @@ void dpp_writePolledCommand(uint8_t subaddress, uint8_t *data, uint8_t numBytes)
 void dpp_changeSplashScreen(uint8_t imageNum)
 {
 	static uint8_t num = 0;
-	static uint8_t flags =  I2C_UNSENT | I2C_TX_MODE;
 
-	//dpp_writePolledCommand(W_SPLASH_SCREEN_SELECT, &num, 1);
-	if(num != imageNum && !(flags & I2C_IN_BUFFER) )
-	{
-		num = imageNum;
-		i2c_addToQueue(DPP_ADDR, W_SPLASH_SCREEN_SELECT, &num, 1, &flags );
-		dpp_sourceSelect(0x02);
-		dpp_splashScreenExecute();
-	}
+	dpp_writePolledCommand(W_SPLASH_SCREEN_SELECT, &num, 1);
+	dpp_sourceSelect(0x02);
+	dpp_splashScreenExecute();
 }
 
 
@@ -168,14 +162,8 @@ void dpp_changeSplashScreen(uint8_t imageNum)
  */
 void dpp_sourceSelect(uint8_t sourceNum)
 {
-	static uint8_t num = 0;
-	static uint8_t flags =  I2C_UNSENT | I2C_TX_MODE;
-	//dpp_writePolledCommand(W_INPUT_SOURCE_SELECT, &num, 1);
-	if(!(flags & I2C_IN_BUFFER))
-	{
-		num = sourceNum;
-		i2c_addToQueue(DPP_ADDR, W_INPUT_SOURCE_SELECT, &num, 1, &flags );
-	}
+	uint8_t num = sourceNum;
+	dpp_writePolledCommand(W_INPUT_SOURCE_SELECT, &num, 1);
 
 
 }
@@ -196,24 +184,18 @@ void dpp_dispCurtain(uint8_t color, uint8_t enable)
 	 */
 
 	static uint8_t theColor = 0;
-	static uint8_t flags = I2C_UNSENT | I2C_TX_MODE;
+	static uint8_t num = 0; //Select input
 
 	if(color < 7)
 	{
 		if(enable)theColor = (color<<1) | 0x01;
-		else theColor = (color<<1) ;
+		else theColor = (color<<1);
 
-		//static uint8_t num = 0;
 
-		//dpp_writePolledCommand(W_INPUT_SOURCE_SELECT, &num, 1);
-		if(!(flags & I2C_IN_BUFFER))
-		{
-			i2c_addToQueue(DPP_ADDR, W_DISPLAY_IMAGE_CURTAIN, &theColor, 1, &flags );
-		}
-		//dpp_writePolledCommand(W_DISPLAY_IMAGE_CURTAIN, &theColor, 1);
-		//return 0;
+		dpp_writePolledCommand(W_INPUT_SOURCE_SELECT, &num, 1);
+		dpp_writePolledCommand(W_DISPLAY_IMAGE_CURTAIN, &theColor, 1);
 
-	}//else //return; //invalid color
+	}//else return -1; //invalid color
 
 }
 

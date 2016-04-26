@@ -13,7 +13,7 @@
 
 #include "timer.h"
 #include "util.h"
-#include "I2C.h"
+#include "I2C_polled.h"
 
 #define DPP3438_ADDR	0x1B
 

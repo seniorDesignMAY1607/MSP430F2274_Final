@@ -9,7 +9,7 @@ util.obj: C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/stdint.h
 util.obj: ../dpp3438.h
 util.obj: ../timer.h
 util.obj: ../util.h
-util.obj: ../I2C.h
+util.obj: ../I2C_polled.h
 util.obj: C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/stdlib.h
 util.obj: C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/linkage.h
 
@@ -22,6 +22,6 @@ C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/stdint.h:
 ../dpp3438.h: 
 ../timer.h: 
 ../util.h: 
-../I2C.h: 
+../I2C_polled.h: 
 C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/stdlib.h: 
 C:/ti/ccsv6/tools/compiler/msp430_4.3.3/include/linkage.h: 
